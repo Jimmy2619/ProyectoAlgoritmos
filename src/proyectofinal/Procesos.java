@@ -87,13 +87,12 @@ public class Procesos {
                     
                     System.out.println("Ingrese la cantidad de productos que desea comprar"); 
                     productos = sc.nextInt();
-                    if (productos <=0 ) {
+                    while(productos <=0 ) {
                         System.out.println("Debe de ingresar al menos 1 producto");
-                    }else{
-                    
-                    //sumar la cantidad de productos vendidos
-                        cantidadProductosVendidos = cantidadProductosVendidos + productos;
-                    
+                        productos = sc.nextInt();
+                    }
+                        
+                        
                         codigo = new int [productos];
                         nombreProducto = new String [productos];
                         precioProducto = new double [productos];
@@ -103,11 +102,12 @@ public class Procesos {
                         
                             System.out.println("Ingrese el codigo del producto "+ (i +1) +":");
                             codigo [i] = sc.nextInt();
+                            sc.nextLine();
                         
                             System.out.println("Ingrese el nombre del producto "+ (i + 1) +":");
-                            nombreProducto[i] = sc.next();
+                            nombreProducto[i] = sc.nextLine();
                         
-                            System.out.println("Ingrese el precio del producto "+ (i + 1) +":");
+                                System.out.println("Ingrese el precio del producto "+ (i + 1) +":");
                             precioProducto [i]=  sc.nextDouble();
                             
                             while (precioProducto[i] <= 0){
@@ -123,16 +123,20 @@ public class Procesos {
                             }
                         
                         }
+                        //calcular subtotal y unidades
                         for (int i = 0; i < productos; i++) {
                             subtotalProducto = precioProducto [i] * cantidadProducto [i];
                         
-                            subtotal = subtotal + subtotalProducto;
+                            subtotal = subtotal + subtotalProducto;     
                         
                         //cantidad de productos
                             unidades = unidades  + cantidadProducto[i];
                         
                         
-                        }
+                        }                    
+                        //sumar la cantidad de productos vendidos
+                        cantidadProductosVendidos = cantidadProductosVendidos + unidades;
+                        
                         System.out.printf("El subtotal es: Q.%.2f%n", subtotal);
                     
                         if (subtotal < 200) {
@@ -160,27 +164,26 @@ public class Procesos {
                                 System.out.println("ingrese su metodo de pago: \n"
                                     + "1 efectivo \n"
                                     + "2 tarjeta \n"
-                                    + "3 tranferencia");
+                                    + "3 transferencia");
                             formaPago = sc.nextInt();
                     
                         switch(formaPago){
                         
-                            //verificssr en efectivo
+                            //verificar en efectivo
                                 case 1:
                             
                                 //sumar el total vendido en efectivo a caja
                                     ventasEfectivo = ventasEfectivo + total;
                             
                                     System.out.println("Ingrese el monto recibido: ");
-                                    recibido = sc.nextDouble();
- //resolver para que si no es suficiento restar lo recibido hasta que se llegue a cubrir lo necesario para la venta: pendiente                           
+                                    recibido = sc.nextDouble();                        
                                 //verificar si el efectivo cubre la compra total
                                     while(recibido < total){
                                     
                                         double faltante = 0;
                                 
-                                        System.out.println("El monto recibido no es suficiente\n"
-                                                + "ingresa lo faltante: ");
+                                        System.out.printf("El monto no es suficiente, faltan Q.%.2f%n", total - recibido);
+                                        System.out.println("Ingrese lo faltante: ");
                                                 faltante = sc.nextDouble();
                                             
                                                 recibido = faltante + recibido;
@@ -212,7 +215,7 @@ public class Procesos {
                                 // sumar el total vendido en tranferencia a caja
                                     ventasTranferencia = ventasTranferencia + total;
 
-                                    System.out.println("Haga su tranferencia para pagar");
+                                    System.out.println("Haga su transferencia para pagar");
                                     System.out.printf("Su total a pagar es: Q.%.2f%n", total); 
                                     cantidadTransferencia++;
                                     //operacion para mostrar el metodo 
@@ -245,10 +248,10 @@ public class Procesos {
                                 if (total > mayor) {
                                     mayor = total;
                                 }
-                                if (total < menor) {
+                                if (cantidadVentas == 1 || total < menor) {
                                     menor = total;
                                 }
-                        }break;
+                        break;
                 //consultar caja
                 case 2:
                     System.out.println("ventas realizadas: "+cantidadVentas);
@@ -266,7 +269,7 @@ public class Procesos {
                     //validar que existan ventas
                     if (cantidadVentas > 0) {
                         promedioVentas = totalVendido/cantidadVentas ;
-                        System.out.println("ESTADISTICAS DE LAS VEMTAS REALIZADAS\n"
+                        System.out.println("ESTADISTICAS DE LAS VENTAS REALIZADAS\n"
                                 + "------------------------------");
                         System.out.println("Número total de ventas: "+ cantidadVentas);
                         System.out.println("Cantidad total de productos vendidos: "+ cantidadProductosVendidos);
@@ -276,7 +279,7 @@ public class Procesos {
                                 + "                                     ");
                         System.out.println("Pagos en efectivo: "+ cantidadEfectivo);
                         System.out.println("Pagos con tarjeta: "+ cantidadTarjeta);
-                        System.out.println("Pagos con tranferencia: " + cantidadTransferencia);
+                        System.out.println("Pagos con transferencia: " + cantidadTransferencia);
                         System.out.printf("Venta de mayor valor: Q.%.2f%n", mayor);
                         System.out.printf("Venta de menor valor: Q.%.2f%n", menor);
                         
@@ -290,21 +293,32 @@ public class Procesos {
                     
                     break;
                     
-                case 4:
-                    System.out.println("------------------------------\n"
-                            + "SALIENDO DEL SISTEMA \n"
-                            + "------------------------------");
-                    
-                    break;   
-                    default:
-                System.out.println("------------------------------\n"
-                    + "Ingresar una opcion valida\n"
-                    + "------------------------------");  
+                    case 4:
+
+                    System.out.println("¿Seguro que desea salir? 1 = Si / 2 = No");
+                    int confirmar = sc.nextInt();
+                    while (confirmar != 1 && confirmar != 2) {
+                        System.out.println("Opcion no valida, ingrese 1 = Si o 2 = No:");
+                        confirmar = sc.nextInt();
+                    }
+
+                    if (confirmar == 1) {
+                        System.out.println("------------------------------\n"
+                                + "SALIENDO DEL SISTEMA \n"
+                                + "------------------------------");
+                    } else {
+                        op = 0;
+                    }
                     break;
-                    
-                    
+
+                default:
+                    System.out.println("------------------------------\n"
+                            + "Ingresar una opcion valida\n"
+                            + "------------------------------");
+                    break;
+
             }
-            
+
         } while (op != 4);
         
 
